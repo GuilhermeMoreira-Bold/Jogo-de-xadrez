@@ -8,7 +8,7 @@
 #include <unordered_map>
 
 #include "Bishop.h"
-#include "Horse.h"
+
 #include "King.h"
 
 #include "Knight.h"
@@ -43,34 +43,50 @@ public:
             pieces[PieceName::WHITE_KNIGHT] = {"/home/guilherme/CLionProjects/Chess/assets/all/w_knight.png", false};
         };
       std::shared_ptr<Piece> create(PieceName name, int row, int col) {
+          std::shared_ptr<Piece> piece;
             switch (name) {
                 case PieceName::BLACK_PAWN:
-                    return std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::BLACK_BISHOP:
-                    return std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::BLACK_KING:
-                    return std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::BLACK_KNIGHT:
-                    return std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::BLACK_QUEEN:
-                    return std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::BLACK_ROOK:
-                    return std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::WHITE_PAWN:
-                    return std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::WHITE_BISHOP:
-                    return std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::WHITE_ROOK:
-                    return std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::WHITE_KING:
-                    return std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::WHITE_KNIGHT:
-                    return std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 case PieceName::WHITE_QUEEN:
-                    return std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    break;
                 default:
-                    return nullptr;
+                    piece = nullptr;
             }
+          
+          Renderer::getInstance().draw(piece->pieceRect,piece->texture);
+          return piece;
       };
 };
 

@@ -20,6 +20,11 @@ void Renderer::draw(SDL_Rect* rect, SDL_Texture* texture) {
     SDL_RenderCopy(renderer,texture,NULL,rect);
 }
 
+void Renderer::clear() {
+    SDL_RenderClear(renderer);
+}
+
+
 void Renderer::render() {
     SDL_RenderPresent(renderer);
 }
@@ -38,11 +43,13 @@ Renderer& Renderer::getInstance() {
 
 SDL_Texture*  Renderer::createTexture (std::string* path) {
     SDL_Surface* surface = IMG_Load(path->c_str());
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
     if(texture == nullptr) {
         printf("SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
     }
+
     return texture;
 }
 

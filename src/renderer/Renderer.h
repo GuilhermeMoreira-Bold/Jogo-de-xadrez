@@ -15,6 +15,7 @@ class Renderer {
     static void draw(SDL_Rect* rect, SDL_Texture* texture);
     static void render();
     static void shutdown();
+    static void clear();
     static SDL_Texture* createTexture(std::string* texturePath);
     private:
     Renderer(const Renderer&) = delete;

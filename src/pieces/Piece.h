@@ -12,6 +12,7 @@ public:
     bool isBlack;
     SDL_Rect* pieceRect;
     SDL_Texture* texture;
+    int* tile_size;
     Piece();
     Piece(int row, int col, SDL_Texture* texture, bool isBlack) : isBlack(isBlack),texture(texture), row(row), col(col) {
 
@@ -19,15 +20,15 @@ public:
     virtual ~Piece() {
         delete pieceRect;
     }
-    virtual void move(int posX, int posY) = 0;
+    virtual void move() = 0;
     int row;
     int col;
     void initRect() {
         pieceRect = new SDL_Rect();
-        this->pieceRect->x = 80 * (col - 1);
-        this->pieceRect->y = 80 * (row - 1);
-        this->pieceRect->w = 80;
-        this->pieceRect->h = 80;
+        this->pieceRect->x = GameSettings::TILE_SIZE * col;
+        this->pieceRect->y = GameSettings::TILE_SIZE * row;
+        this->pieceRect->w = GameSettings::TILE_SIZE;
+        this->pieceRect->h = GameSettings::TILE_SIZE;
     };
 };
 

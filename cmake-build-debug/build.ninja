@@ -56,12 +56,12 @@ build CMakeFiles/Chess.dir/main.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /home
   OBJECT_DIR = CMakeFiles/Chess.dir
   OBJECT_FILE_DIR = CMakeFiles/Chess.dir
 
-build CMakeFiles/Chess.dir/renderer/Renderer.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /home/guilherme/CLionProjects/Chess/renderer/Renderer.cpp || cmake_object_order_depends_target_Chess
-  DEP_FILE = CMakeFiles/Chess.dir/renderer/Renderer.cpp.o.d
+build CMakeFiles/Chess.dir/src/renderer/Renderer.cpp.o: CXX_COMPILER__Chess_unscanned_Debug /home/guilherme/CLionProjects/Chess/src/renderer/Renderer.cpp || cmake_object_order_depends_target_Chess
+  DEP_FILE = CMakeFiles/Chess.dir/src/renderer/Renderer.cpp.o.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -isystem /usr/include/SDL2
   OBJECT_DIR = CMakeFiles/Chess.dir
-  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/renderer
+  OBJECT_FILE_DIR = CMakeFiles/Chess.dir/src/renderer
 
 
 # =============================================================================
@@ -71,7 +71,7 @@ build CMakeFiles/Chess.dir/renderer/Renderer.cpp.o: CXX_COMPILER__Chess_unscanne
 #############################################
 # Link the executable Chess
 
-build Chess: CXX_EXECUTABLE_LINKER__Chess_Debug CMakeFiles/Chess.dir/main.cpp.o CMakeFiles/Chess.dir/renderer/Renderer.cpp.o | /usr/lib/x86_64-linux-gnu/libSDL2.so
+build Chess: CXX_EXECUTABLE_LINKER__Chess_Debug CMakeFiles/Chess.dir/main.cpp.o CMakeFiles/Chess.dir/src/renderer/Renderer.cpp.o | /usr/lib/x86_64-linux-gnu/libSDL2.so
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/x86_64-linux-gnu/libSDL2.so  -lSDL2_image
   OBJECT_DIR = CMakeFiles/Chess.dir

@@ -5,6 +5,7 @@
 #ifndef PAWN_H
 #define PAWN_H
 #include "Piece.h"
+#include "../renderer/Renderer.h"
 
 class Pawn : public Piece {
   public:
@@ -15,8 +16,13 @@ class Pawn : public Piece {
     this->isBlack = isBlack;
     this->initRect();
   }
-  void move(int posX, int posY) override {
-
+  void move() override {
+    if(isBlack) {
+      row += 1;
+    }else {
+      row -= 1;
+    }
+    pieceRect->y = row * GameSettings::TILE_SIZE;
   }
 
 };

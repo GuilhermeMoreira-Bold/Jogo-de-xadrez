@@ -15,7 +15,7 @@ class Bishop : public Piece {
     this->isBlack = isBlack;
     this->initRect();
   }
-  void move(int posX, int posY) override {
+  void move() override {
 
   }
 };
