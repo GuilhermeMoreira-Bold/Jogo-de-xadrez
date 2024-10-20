@@ -59,6 +59,10 @@ makefile
 ├── include/         # Cabeçalhos das classes
 └── README.md        # Este arquivo
 
+Em progresso: Criando o sistema de movimentação das peças, ao clicar no pião já é possível visualizar quais casas ele pode ir
+, entretanto, o sistema não detecta capturas, ainda, falta só expandir para essa funcionalidade e adicionar as regras de movimentação
+para as outras peças, além de corrigir um erro de vazamento de memória detectado em código.
+
 Próximos Passos
 
 Implementar a movimentação das peças.

@@ -13,7 +13,7 @@ add_executable(Chess main.cpp
         src/pieces/Pawn.h
         src/renderer/Renderer.h
         src/renderer/Renderer.cpp
-        src/board/Board.h
+        src/board/Square.h
         src/pieces/PieceFactory.h
         src/pieces/PieceName.h
         src/pieces/Bishop.h
@@ -22,10 +22,12 @@ add_executable(Chess main.cpp
         src/pieces/King.h
         src/pieces/Queen.h
         src/movement/MovementRule.h
-        src/movement/PawnMovementRule.h
-        src/board/Square.h
+        src/board/Board.h
         src/Game.h
         src/GameSettings.h
+        src/Ui.h
+        src/movement/PossibleMoves.h
+        src/movement/PawnMovimentRule.h
 )
 
 target_link_libraries(Chess ${SDL2_LIBRARIES} SDL2_image)

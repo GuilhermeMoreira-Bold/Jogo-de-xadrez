@@ -7,14 +7,14 @@
 
 class Queen : public Piece {
     public:
-    Queen(int row, int col, SDL_Texture* texture,bool isBlack) : Piece(row, col, texture, isBlack){
+    Queen(int row, int col, SDL_Texture* texture,bool isBlack,MovementRule* movementRule) : Piece(row, col, texture, isBlack,movementRule){
     this->texture = texture;
     this->col = col;
     this->row = row;
     this->isBlack = isBlack;
     this->initRect();
   }
-  void move() override {
+  void move(int col, int row) override {
 
   }
 };

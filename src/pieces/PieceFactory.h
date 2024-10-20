@@ -17,7 +17,11 @@
 #include "PieceName.h"
 #include "Queen.h"
 #include "Rook.h"
+#include "../Game.h"
 #include "../renderer/Renderer.h"
+#include "../movement/PawnMovimentRule.h"
+
+class PawnMovement;
 
 struct PiecesInfo {
     std::string texturePath;
@@ -46,40 +50,40 @@ public:
           std::shared_ptr<Piece> piece;
             switch (name) {
                 case PieceName::BLACK_PAWN:
-                    piece = std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack, new PawnMovimentRule());
                     break;
                 case PieceName::BLACK_BISHOP:
-                    piece = std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::BLACK_KING:
-                    piece = std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::BLACK_KNIGHT:
-                    piece = std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::BLACK_QUEEN:
-                    piece = std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::BLACK_ROOK:
-                    piece = std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::WHITE_PAWN:
-                    piece = std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Pawn>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::WHITE_BISHOP:
-                    piece = std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Bishop>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::WHITE_ROOK:
-                    piece = std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Rook>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::WHITE_KING:
-                    piece = std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<King>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::WHITE_KNIGHT:
-                    piece = std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Knight>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 case PieceName::WHITE_QUEEN:
-                    piece = std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack);
+                    piece = std::make_shared<Queen>(row, col, Renderer::createTexture(&pieces[name].texturePath), pieces[name].isBlack,new PawnMovimentRule());
                     break;
                 default:
                     piece = nullptr;

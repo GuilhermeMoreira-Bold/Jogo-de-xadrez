@@ -9,6 +9,7 @@
 #include <SDL_image.h>
 
 #include "GameSettings.h"
+#include "Ui.h"
 #include "board/Board.h"
 #include "board/Square.h"
 #include "pieces/PieceFactory.h"
@@ -41,9 +42,10 @@ namespace Chess {
     };
 
     private:
-    Ref<Square> square;
+    Ref<Board> board;
     SDL_Window* window;
     Ref<Piece> pieces[64] = {};
+        Ui ui;
     int pieceQuantity = 0;
     bool isRunning = true;
     int getPieceQuanitity() {
@@ -67,7 +69,7 @@ namespace Chess {
         }
 
         Renderer::init(win);
-        createBoard();
+        renderBoard();
 
         Ref factory = std::make_unique<PieceFactory>();
 
@@ -99,17 +101,17 @@ namespace Chess {
         pieces[getPieceQuanitity()]  = std::move(factory->create(PieceName::BLACK_ROOK, 0, 7));
 
 
-        square = std::make_shared<Square>(pieces);
+        board = std::make_shared<Board>(pieces);
 
 
         Renderer::getInstance().render();
     };
 
-    void createBoard() {
-        Board board;
+    void renderBoard() {
+        Square square;
 
-        SDL_Texture *darkSquareTexture = Renderer::getInstance().createTexture(&board.darkSquare);
-        SDL_Texture *lightSquareTexture = Renderer::getInstance().createTexture(&board.lightSquare);
+        SDL_Texture *darkSquareTexture = Renderer::getInstance().createTexture(&square.darkSquare);
+        SDL_Texture *lightSquareTexture = Renderer::getInstance().createTexture(&square.lightSquare);
 
         bool isWhite = false;
         bool isNextLine = false;
@@ -149,32 +151,43 @@ namespace Chess {
     void handleEvent(SDL_Event &event) {
         switch (event.type) {
             case SDL_MOUSEBUTTONDOWN:
-                int x = event.motion.x / GameSettings::TILE_SIZE;
-                int y = event.motion.y / GameSettings::TILE_SIZE;
-                std::cout <<"Mouse position:" <<"x: " << x << " y: " << y << std::endl;
-                std::shared_ptr<Piece> piece = square->positions[y][x];
-                if(piece) {
-                    Renderer::getInstance().clear();
-                    createBoard();
-                    int oldX = piece->row;
-                    int oldY = piece->col;
-                    piece->move();
-                    square->changePiecePosition(oldX, oldY,piece);
-                    for(int i = 0; i < 64; i ++) {
-                        if(pieces[i] != nullptr) {
-                            Renderer::draw(pieces[i]->pieceRect, pieces[i]->texture);
+                int mousePositionX = event.motion.x / GameSettings::TILE_SIZE;
+                int mousePositionY = event.motion.y / GameSettings::TILE_SIZE;
+                std::shared_ptr<Piece> clickedPiece = board->positions[mousePositionY][mousePositionX];
+                if(clickedPiece) {
+                    std::vector<Ref<PossibleMoves>> possibleMoves = clickedPiece->movementRule->validMoviments(board,clickedPiece);
+                    ui.piecePossiblePositions(possibleMoves); //TODO memory leak here
+                    SDL_Event pieceEvent;
+                    while(SDL_WaitEvent(&pieceEvent)) {
+                        if (pieceEvent.type == SDL_MOUSEBUTTONDOWN) {
+                            int col = pieceEvent.motion.x / GameSettings::TILE_SIZE;
+                            int row = pieceEvent.motion.y / GameSettings::TILE_SIZE;
+                            for (Ref<PossibleMoves> const& move : possibleMoves) {
+                                if (move->row == row && move->col == col) {
+                                    int oldRow = clickedPiece->row;
+                                    int oldCol = clickedPiece->col;
+
+                                    clickedPiece->move(col, row);
+                                    board->changePiecePosition(oldRow, oldCol,clickedPiece);
+                                }
+                            }
+                            Renderer::clear();
+                            renderBoard();
+                            for(int i = 0; i < 64; i ++) {
+                                if(pieces[i] != nullptr) {
+                                    Renderer::draw(pieces[i]->pieceRect, pieces[i]->texture);
+                                }
+                            }
+                            Renderer::getInstance().render();
+                            break;
                         }
+
                     }
-                    Renderer::getInstance().render();
-                }else {
-                    std::cout << "Piece not found" << std::endl;
-                };
+                }
                 break;
         }
     }
 };
 
-
 }
-
 #endif //GAME_H
