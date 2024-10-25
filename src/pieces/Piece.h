@@ -7,23 +7,32 @@
 #include <memory>
 #include <SDL_render.h>
 
-#include "../movement/MovementRule.h"
+#include "../movement/MovimentRule.h"
 
 
 class Piece {
 public:
     bool isBlack;
-    MovementRule* movementRule;
+    MovimentRule* movementRule;
     SDL_Rect* pieceRect;
     SDL_Texture* texture;
     int* tile_size;
+    bool isFirstMove = true;
     Piece();
-    Piece(int row, int col, SDL_Texture* texture, bool isBlack, MovementRule* movementRule) : movementRule(movementRule),isBlack(isBlack), texture(texture),row(row), col(col) {
-    };
+
+    Piece(int row, int col, SDL_Texture* texture, bool isBlack, MovimentRule* movementRule) : movementRule(movementRule),isBlack(isBlack), texture(texture),row(row), col(col) {};
     virtual ~Piece() {
         delete pieceRect;
+        delete tile_size;
+        delete movementRule;
     }
-    virtual void move(int col, int row) = 0;
+    virtual void move(int col, int row) {
+        pieceRect->y = row * GameSettings::TILE_SIZE;
+        pieceRect->x = col * GameSettings::TILE_SIZE;
+        this->col = col;
+        this->row = row;
+        this->isFirstMove = false;
+    };
     int row;
     int col;
     void initRect() {

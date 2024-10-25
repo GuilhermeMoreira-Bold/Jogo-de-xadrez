@@ -22,6 +22,9 @@ using Ref =  std::shared_ptr <T>;
 namespace Chess {
     class Game {
     public:
+        Square square;
+        SDL_Texture* darkSquareTexture;
+        SDL_Texture* lightSquareTexture;
     Game() {
         init();
     };
@@ -42,15 +45,15 @@ namespace Chess {
     };
 
     private:
-    Ref<Board> board;
-    SDL_Window* window;
-    Ref<Piece> pieces[64] = {};
+        Ref<Board> board;
+        SDL_Window* window;
+        Ref<Piece> pieces[64] = {};
         Ui ui;
-    int pieceQuantity = 0;
-    bool isRunning = true;
-    int getPieceQuanitity() {
-        return pieceQuantity++;
-    }
+        int pieceQuantity = 0;
+        bool isRunning = true;
+        int getPieceQuanitity() {
+            return pieceQuantity++;
+        }
 
     void init() {
         if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -69,6 +72,8 @@ namespace Chess {
         }
 
         Renderer::init(win);
+        darkSquareTexture = Renderer::getInstance().createTexture(&square.darkSquare);
+        lightSquareTexture = Renderer::getInstance().createTexture(&square.lightSquare);
         renderBoard();
 
         Ref factory = std::make_unique<PieceFactory>();
@@ -103,16 +108,10 @@ namespace Chess {
 
         board = std::make_shared<Board>(pieces);
 
-
-        Renderer::getInstance().render();
+        Renderer::render();
     };
 
     void renderBoard() {
-        Square square;
-
-        SDL_Texture *darkSquareTexture = Renderer::getInstance().createTexture(&square.darkSquare);
-        SDL_Texture *lightSquareTexture = Renderer::getInstance().createTexture(&square.lightSquare);
-
         bool isWhite = false;
         bool isNextLine = false;
         SDL_Rect destRect;
@@ -144,10 +143,44 @@ namespace Chess {
             isNextLine = !isNextLine;
         }
     }
+
     void shutDown() {
         SDL_DestroyWindow(window);
         SDL_Quit();
     };
+    void handleClickedPiece(std::shared_ptr<Piece> clickedPiece) {
+        std::vector<Ref<PossibleMove>> possibleMoves = clickedPiece->movementRule->validMoviments(board, clickedPiece);
+        ui.piecePossiblePositions(possibleMoves);
+        SDL_Event pieceEvent;
+        while(SDL_WaitEvent(&pieceEvent)) {
+            if (pieceEvent.type == SDL_MOUSEBUTTONDOWN) {
+                int col = pieceEvent.motion.x / GameSettings::TILE_SIZE;
+                int row = pieceEvent.motion.y / GameSettings::TILE_SIZE;
+                for (Ref<PossibleMove> const& move : possibleMoves) {
+                    if (move->row == row && move->col == col) {
+                        int oldRow = clickedPiece->row;
+                        int oldCol = clickedPiece->col;
+                        clickedPiece->move(col, row);
+                        board->changePiecePosition(oldRow, oldCol,clickedPiece);
+                    }
+                }
+                Renderer::clear();
+                renderBoard();
+                for (int x = 0; x < 8; x++) {
+                    for (int y = 0; y < 8; y++) {
+                        if (board->positions[x][y] != nullptr) {
+                            Renderer::draw(board->positions[x][y]->pieceRect,board->positions[x][y]->texture);
+                        }
+                    }
+                }
+                Renderer::getInstance().render();
+                break;
+            }
+
+        }
+    }
+
+
     void handleEvent(SDL_Event &event) {
         switch (event.type) {
             case SDL_MOUSEBUTTONDOWN:
@@ -155,34 +188,7 @@ namespace Chess {
                 int mousePositionY = event.motion.y / GameSettings::TILE_SIZE;
                 std::shared_ptr<Piece> clickedPiece = board->positions[mousePositionY][mousePositionX];
                 if(clickedPiece) {
-                    std::vector<Ref<PossibleMoves>> possibleMoves = clickedPiece->movementRule->validMoviments(board,clickedPiece);
-                    ui.piecePossiblePositions(possibleMoves); //TODO memory leak here
-                    SDL_Event pieceEvent;
-                    while(SDL_WaitEvent(&pieceEvent)) {
-                        if (pieceEvent.type == SDL_MOUSEBUTTONDOWN) {
-                            int col = pieceEvent.motion.x / GameSettings::TILE_SIZE;
-                            int row = pieceEvent.motion.y / GameSettings::TILE_SIZE;
-                            for (Ref<PossibleMoves> const& move : possibleMoves) {
-                                if (move->row == row && move->col == col) {
-                                    int oldRow = clickedPiece->row;
-                                    int oldCol = clickedPiece->col;
-
-                                    clickedPiece->move(col, row);
-                                    board->changePiecePosition(oldRow, oldCol,clickedPiece);
-                                }
-                            }
-                            Renderer::clear();
-                            renderBoard();
-                            for(int i = 0; i < 64; i ++) {
-                                if(pieces[i] != nullptr) {
-                                    Renderer::draw(pieces[i]->pieceRect, pieces[i]->texture);
-                                }
-                            }
-                            Renderer::getInstance().render();
-                            break;
-                        }
-
-                    }
+                    handleClickedPiece(clickedPiece);
                 }
                 break;
         }

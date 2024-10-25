@@ -8,15 +8,13 @@
 
 class King : public Piece {
   public:
-  King(int row, int col, SDL_Texture* texture,bool isBlack,MovementRule* movementRule) : Piece(row, col, texture, isBlack,movementRule){
+  King(int row, int col, SDL_Texture* texture,bool isBlack,MovimentRule* movementRule) : Piece(row, col, texture, isBlack,movementRule){
     this->texture = texture;
     this->col = col;
     this->row = row;
     this->isBlack = isBlack;
     this->initRect();
-  }
-  void move(int col, int row) override {
-
+    this->movementRule = movementRule;
   }
 };
 #endif //KING_H

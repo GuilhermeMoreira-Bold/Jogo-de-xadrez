@@ -8,15 +8,12 @@
 
 class Knight : public Piece {
     public:
-    Knight(int row, int col, SDL_Texture* texture,bool isBlack,MovementRule* movementRule) : Piece(row, col, texture, isBlack,movementRule){
+    Knight(int row, int col, SDL_Texture* texture,bool isBlack,MovimentRule* movementRule) : Piece(row, col, texture, isBlack,movementRule){
         this->texture = texture;
         this->col = col;
         this->row = row;
         this->isBlack = isBlack;
         this->initRect();
-    }
-    void move(int col, int row) override {
-
     }
 };
 

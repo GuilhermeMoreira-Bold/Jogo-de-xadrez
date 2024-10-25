@@ -7,13 +7,13 @@
 #include <vector>
 
 #include "GameSettings.h"
-#include "movement/PossibleMoves.h"
+#include "movement/PossibleMove.h"
 #include "renderer/Renderer.h"
 
 class Ui {
     public:
-    void piecePossiblePositions(std::vector<std::shared_ptr<PossibleMoves>> positions) {
-        for (std::shared_ptr<PossibleMoves> &position : positions) {
+    void piecePossiblePositions(std::vector<std::shared_ptr<PossibleMove>> &positions) {
+        for (const std::shared_ptr<PossibleMove> &position : positions) {
             SDL_Rect rect;
             rect.x = GameSettings::TILE_SIZE * position->col;
             rect.y = GameSettings::TILE_SIZE * position->row;

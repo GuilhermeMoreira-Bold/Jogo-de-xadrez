@@ -49,7 +49,6 @@ SDL_Texture*  Renderer::createTexture (std::string* path) {
     if(texture == nullptr) {
         printf("SDL_CreateTextureFromSurface Error: %s\n", SDL_GetError());
     }
-
     return texture;
 }
 

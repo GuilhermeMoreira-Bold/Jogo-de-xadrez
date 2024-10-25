@@ -5,8 +5,9 @@
 #ifndef POSSIBLEMOVES_H
 #define POSSIBLEMOVES_H
 
-struct PossibleMoves {
+struct PossibleMove {
     int row, col;
-    PossibleMoves(int row, int col) : row(row), col(col) {};
+    PossibleMove(int row, int col) : row(row), col(col) {};
+    virtual ~PossibleMove() {};
 };
 #endif //POSSIBLEMOVES_H

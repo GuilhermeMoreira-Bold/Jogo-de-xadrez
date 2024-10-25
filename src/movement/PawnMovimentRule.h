@@ -8,31 +8,36 @@
 // Created by guilherme on 17/10/24.
 //
 
-
 #include <vector>
-#include "MovementRule.h"
-#include "../board/Board.h"
+
 template <typename T>
 using Ref = std::shared_ptr<T>;
 
-class PawnMovimentRule : public MovementRule {
+class PawnMovimentRule : public MovimentRule {
 public:
     PawnMovimentRule(){};
-    bool isFirstMove = true;
-    std::vector<Ref<PossibleMoves>> moves = {};
-    Ref<Piece> clickedPiece;
-    std::vector<Ref<PossibleMoves>> validMoviments(std::shared_ptr<Board> board,Ref<Piece> piece) override {
-        clickedPiece = piece;
+    std::vector<Ref<PossibleMove>> validMoviments(std::shared_ptr<Board> board,Ref<Piece> piece) override {
+        std::vector<Ref<PossibleMove>> moves;
         moves.clear();
         int direction = piece->isBlack ? 1 : -1;
+        if (piece-> row + direction <= 7 && piece-> row + direction >= 0) {
+            if(board->positions[piece->row + direction][piece->col] == nullptr ) {
+                if (board->positions[piece->row + 2 * direction][piece->col] == nullptr && piece->isFirstMove) {
+                    moves.push_back(std::make_shared<PossibleMove>(piece->row + 2 * direction, piece->col));
+                    moves.push_back(std::make_shared<PossibleMove>(piece->row + 1 * direction, piece->col));
+                }else{
+                moves.push_back(std::make_shared<PossibleMove>(piece->row + 1 * direction, piece->col));
+                }
+            }
 
-        if(board->positions[piece->row + direction][piece->col] == nullptr) {
-            moves.push_back(std::make_shared<PossibleMoves>(piece->row + 1 * direction, piece->col));
+            if (board->positions[ piece->row + direction][piece->col + direction] && board->positions[ piece->row + direction][piece->col + direction]->isBlack != piece->isBlack) {
+                moves.push_back(std::make_shared<PossibleMove>(piece->row + direction, piece->col + direction));
+            }
+
+            if (board->positions[ piece->row + direction][piece->col - direction] && board->positions[piece->row + direction][piece->col - direction]->isBlack != piece->isBlack) {
+                moves.push_back(std::make_shared<PossibleMove>(piece->row + direction, piece->col - direction));
+            }
         }
-        if (board->positions[piece->row + 2 * direction][piece->col] == nullptr && isFirstMove) {
-            moves.push_back(std::make_shared<PossibleMoves>(piece->row + 2 * direction, piece->col));
-        }
-        isFirstMove = false;
         return moves;
     };
 };
